@@ -10,6 +10,8 @@ def index(request):
 def wl(request):
     return render(request, 'layouts/wl1.html')
 
+def temp_foo():
+    pass
 
 
 def autocomplete(request):
