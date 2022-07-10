@@ -1,0 +1,178 @@
+{% extends "layouts/base.html" %}
+
+
+
+{% block content %}
+
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Сварочный журнал</h4>
+			</div>
+
+<!--			<div>&lt;!&ndash; Обеспечивает дополнительный визуальный вес и определяет основное действие в кнопки &ndash;&gt;-->
+<!--				<a href="{% url 'newapp:create' %}"><button type="button" class="btn btn-primary">Создать запись в журнале</button></a>-->
+<!--			</div>-->
+
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Список сварных стыков</h4>
+						</div>
+						<div class="col-md-6">
+							<h4 class="text-section">Титул</h4>
+							<div class="form-group input-group">
+								<input class="form-control form-control" id="test" type="hidden" placeholder="Введи титул установки">
+								<input class="form-control form-control" id="title" placeholder="Введи титул установки">
+							</div>
+							<h4 class="text-section">Линия</h4>
+							<div class="form-group input-group">
+								<input class="form-control form-control" id="line" placeholder="Введи номер линии" onblur="job();">
+							</div>
+
+
+
+<!--							<h4 class="text-section">Место сварки</h4>-->
+
+<!--							<div class="form-group hidden col-md-4">-->
+<!--								<select class="form-control form-control" id="defaultSelect">-->
+<!--									<option value=""> </option>-->
+<!--									<option value="F">F</option>-->
+<!--    								<option value="S">S</option>-->
+<!--								</select>-->
+<!--							</div>-->
+						</div>
+
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="multi-filter-select" class="display table table-striped table-hover">
+									<thead>
+									<tr>
+										<th>Изометрия</th>
+										<th>Номер стыка</th>
+										<th>Дата сварки</th>
+									</tr>
+									</thead>
+									<tbody id="table_joints">
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+	<script>
+
+		function job(){
+			var text_title = $('#title').val();
+			var text_line = $('#line').val();
+			var itog = text_title + '/' + text_line;
+			$.ajax({
+				url: '{% url 'newapp:filling_table' %}',
+				data: itog,
+				async: false,
+				success: function (data) {
+					query_list = data;
+					console.log(data['isometric'].length);
+					var my_table = "";
+					for(var i=0; i<data['isometric'].length; i++){
+						my_table += "<tr><td>"+data['isometric'][i]+"</td><td>"+data['joint_number'][i]+"</td><td>"+data['date_weld'][i]+"</td></tr>";
+					}
+					document.getElementById("table_joints").innerHTML = my_table;
+					},
+				error: function (error) {
+					console.log(error);
+					},
+				});
+		}
+
+		 function query_send() {
+			var text_title = $('#title').val();
+			var text_line = $('#line').val();
+			var itog = text_title + '/' + text_line;
+			var query_list = [];
+			$.ajax({
+				url: '{% url 'newapp:splitting_request' %}',
+				data: itog,
+				async: false,
+				success: function (data) {
+					query_list = data['result'];
+					},
+				error: function (error) {
+					console.log(error);
+					},
+				});
+				return query_list
+			}
+
+
+		$('input').focus(function() {
+			console.log('start autocomplete title')
+			$("#title" ).autocomplete({
+			  source: '{% url 'newapp:autocomplete' %}',
+			  maxHeight: 100,
+			});
+		  });
+
+
+
+		$('input').focus(function(){
+			var line_list = query_send();
+			console.log('start autocomplete line');
+			$("#line" ).autocomplete({
+			  source: line_list,
+			});
+		});
+
+
+
+	</script>
+
+{% endblock javascripts %}
+
+<!--		$('.basicAutoSelect').autoComplete();-->
+
+<!--$(function(){-->
+<!--			$("#line" ).autocomplete({-->
+<!--			  source: '{% url 'newapp:autocomplete_line' %}'-->
+<!--			});-->
+<!--		  });-->
+
+<!--		$(function(){-->
+<!--			$("#line" ).autocomplete({-->
+<!--			  source: '{% url 'newapp:autocomplete_line' %}'-->
+<!--			});-->
+<!--		});-->
+
+<!--		$('#title, #line').keyup(function () {-->
+<!--			var text_title = $('#title').val();-->
+<!--			var text_line = $('#line').val();-->
+<!--			var itog = text_title + '/' + text_line;-->
+<!--			$.ajax({-->
+<!--				url: '{% url 'newapp:splitting_request' %}',-->
+<!--				data: itog,-->
+<!--				success: function (data) {-->
+<!--&lt;!&ndash;					console.log(data);&ndash;&gt;-->
+<!--				},-->
+<!--				error: function (error) {-->
+<!--					console.log(error);-->
+<!--					},-->
+
+<!--			});-->
+<!--		});-->

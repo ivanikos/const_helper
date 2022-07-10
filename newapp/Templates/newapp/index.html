@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+<h1> {{ title  }} </h1>
+{% endblock %}
+
+
+
+
+{% block content %}
+    {% for item in joints %}
+        <div>
+            <p> Isometric                      - number joint  -           date of welding </p>
+            <p>{{  item.isometric  }} -
+                {{  item.locationweld  }}{{  item.numberjoint  }} -
+                {{ item.dateweld|date:"Y.m.d"  }} </p>
+        </div>
+    {% endfor %}
+{% endblock %}
