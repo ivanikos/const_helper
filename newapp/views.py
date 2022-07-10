@@ -10,8 +10,7 @@ def index(request):
 def wl(request):
     return render(request, 'layouts/wl1.html')
 
-def new_view_need_delete():
-    pass
+
 
 def autocomplete(request):
     if 'term' in request.GET:
