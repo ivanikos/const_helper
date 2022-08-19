@@ -1,14 +1,23 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from .models import joint
 from .forms import JointForm
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
+
+@login_required(login_url="accounts/login/")
 def index(request):
     return render(request, 'layouts/index.html')
 
+@login_required(login_url="accounts/login/")
 def wl(request):
+    if not request.user.has_perm('newapp.view_joint'):
+        raise PermissionDenied()
+    print(request.user)
     return render(request, 'layouts/wl1.html')
+
 
 
 
@@ -58,11 +67,7 @@ def autofilling_table(request):
 
 
 def create_joint(request):
-    form = JointForm()
-    data = {
-        'form': form,
-    }
-    return render(request, 'layouts/create_joint.html', data)
+    pass
 
 def filling_table(request):
     print(request)
@@ -81,7 +86,10 @@ def mtr(request):
 def nk(request):
     return render(request, 'layouts/nk_page.html')
 
+
 def summary(request):
+    if not request.user.has_perm('newapp.add_joint'):
+        return render(request, 'layouts/nk_page.html')
     return render(request, 'layouts/summary_inf.html')
 
 

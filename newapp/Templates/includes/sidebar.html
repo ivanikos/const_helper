@@ -4,6 +4,7 @@
 <div class="sidebar sidebar-style-2" data-background-color="dark2">
 	<div class="sidebar-wrapper scrollbar scrollbar-inner">
 
+		{% if request.user.is_authenticated %}
 		<div class="user">
 			<div class="avatar-sm float-left mr-2">
 				<img src="{% static 'newapp/img/multfilm_Simpsons_10262.jpg' %}" alt="..." class="avatar-img rounded-circle">
@@ -24,12 +25,12 @@
 					<ul class="nav">
 						<li>
 							<a href="#profile">
-								<span class="link-collapse">My Profile</span>
+								<span class="link-collapse">Мой профиль</span>
 							</a>
 						</li>
 						<li>
-							<a href="">
-								<span class="link-collapse">Logout</span>
+							<a href="accounts/logout">
+								<span class="link-collapse">Выход из системы</span>
 							</a>
 						</li>
 					</ul>
@@ -155,6 +156,7 @@
 				</li>
 			</ul>
 		</ul>
+		{% endif %}
 	</div>
 </div>
         <!-- End Sidebar -->
