@@ -41,7 +41,17 @@ class joint(models.Model):
         verbose_name_plural = 'Сварочный журнал'
         ordering = ['-dateweld']
 
-class testmodel(models.Model):
-    test_text = models.CharField(max_length=30)
-    test_date = models.DateTimeField()
-    test_file = models.FileField(upload_to='conclusion_vik/', null=True, blank=True)
+class Work(models.Model):
+    id_work = models.CharField(max_length=36, verbose_name='Идентификатор работы')
+    type_work = models.CharField(max_length=256, verbose_name='Вид работы')
+    unit_measure = models.CharField(max_length=15, verbose_name='Единица измерения')
+
+
+class Test(models.Model):
+    work = models.CharField(max_length=50, verbose_name='Работа')
+    type_w = models.CharField(max_length=256, blank=True)
+
+class Test1(models.Model):
+    unit_meas = models.CharField(max_length=100)
+    all_vol = models.FloatField()
+    t_work = models.ForeignKey(Test, on_delete=models.CASCADE)
